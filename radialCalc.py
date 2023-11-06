@@ -102,19 +102,26 @@ def octal_to_decimal(octal_num, base):
 
 def hexadecimal_to_decimal(hex_num, base):
     steps = []
-    decimal_num = int(hex_num, 16)
-    steps.append("")
+    decimal_num = 0
+    decimal_representation = int(hex_num, 16)
+    power = len(hex_num) - 1
     steps.append(f"Start with hexadecimal number {hex_num}.")
-    steps.append(f"Convert hexadecimal to decimal: {hex_num} = {decimal_num} in decimal.")
-    steps.append(f"Convert decimal to radix-{base}.")
-    steps.append("")
-    steps_inside, radial_representation = radial_to_decimal(hex_num, base)
-    steps.append(steps_inside)
-    steps.append("")
-    steps.append(f"The radix-{base} representation is {hex_num}.")
-    steps.append(f"The decimal representation is ∴ {radial_representation}.")
-    steps.append("")
-    return steps, radial_representation
+    steps.append(f"Convert hexadecimal to decimal: {hex_num} = {decimal_representation} in decimal.")
+    steps.append(f"Convert decimal to radix-{base}.\n")
+    
+    for digit in hex_num:
+        if digit.isdigit():
+            value = int(digit) * (base ** power)
+        else:
+            value = (ord(digit.upper()) - ord('A') + 10) * (base ** power)
+        steps.append(f"Step: Multiply {digit} = {int(digit, base)} by {base}^{power} = {value}")
+        decimal_num += value
+        power -= 1
+    
+    steps.append(f"\nStep: Add all the values. {hex_num} = {decimal_num} in decimal.")
+    steps.append(f"\nThe radix-{base} representation is {hex_num}.")
+    steps.append(f"The decimal representation is ∴ {decimal_num}.\n")
+    return steps, decimal_num
 
 def radial_to_decimal(radial_num, base):
     decimal_num = 0
